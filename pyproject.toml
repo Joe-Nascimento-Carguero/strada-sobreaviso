@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "strada-sobreaviso"
+version = "0.1.0"
+description = ""
+authors = ["Joe Please Nascimento <joenascimento2000@gmailcom>"]
+readme = "README.md"
+packages = [{include = "strada_sobreaviso"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.100.0"
+uvicorn = "^0.22.0"
+httpx = "^0.24.1"
+jinja2 = "^3.1.2"
+google-auth = "^2.21.0"
+rich = "^13.4.2"
+sqlalchemy = "^2.0.18"
+asyncpg = "^0.28.0"
+psycopg2 = "^2.9.6"
+asyncio = "^3.4.3"
+faker = "^19.1.0"
+pep8 = "^1.7.1"
+
+
+[tool.poetry.group.dev.dependencies]
+isort = "^5.12.0"
+blue = "^0.9.1"
+taskipy = "^1.11.0"
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+
+
+[tool.poetry.group.doc.dependencies]
+mkdocs = "^1.4.3"
+mkdocs-material = "^9.1.18"
+mkdocstrings = "^0.22.0"
+mkdocstrings-python = "^1.1.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+lint = "blue --check --diff . && isort --check --diff ."
+docs = "mkdocs serve"
+pre_test = "task lint"
+test = "pytest -s -x -vv --cov=strada_sobreaviso"
+post_test = "coverage html"
+server = "uvicorn --app-dir strada_sobreaviso main:app --reload"
