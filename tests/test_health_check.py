@@ -5,16 +5,6 @@ from strada_sobreaviso.main import app
 client = TestClient(app)
 
 
-def test_deve_retornar_o_status_code_200():
-    response = client.get('/')
-    assert response.status_code == 200
-
-
-def test_deve_retornar_status_ok():
-    response = client.get('/')
-    assert response.json() == {'status': 'ok'}
-
-
 def test_deve_retornar_o_status_code_200_health():
     response = client.get('/health')
     assert response.status_code == 200
