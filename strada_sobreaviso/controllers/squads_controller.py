@@ -3,7 +3,7 @@ from sqlalchemy.sql import select
 
 from strada_sobreaviso.database.config import db_deps
 from strada_sobreaviso.database.schemas import Squads
-from strada_sobreaviso.models.squads import SquadBase, SquadResponse
+from strada_sobreaviso.models.squads import SquadBase
 
 router = APIRouter()
 
@@ -29,7 +29,7 @@ def get_squad_by_id(squad_id: int, db: db_deps):
     '/create',
     status_code=status.HTTP_201_CREATED,
 )
-def create_squad(db: db_deps, squad: SquadBase, response_model=SquadResponse):
+def create_squad(db: db_deps, squad: SquadBase):
     squad_model = Squads(name=squad.name)
     squads = select(Squads).where(squad_model.name == squad.name)
     result = db.execute(squads)
