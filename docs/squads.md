@@ -1,0 +1,1 @@
+::: strada_sobreaviso.controllers.squads_controller.get_all_squads

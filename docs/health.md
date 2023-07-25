@@ -1,0 +1,1 @@
+::: strada_sobreaviso.controllers.health_controller.health_check

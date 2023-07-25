@@ -1,1 +1,13 @@
-site_name: My Docs
+site_name: Strada Sobreaviso
+
+theme:
+  name: material
+
+plugins:
+  - mkdocstrings
+
+nav:
+  - Index: index.md
+  - Health Check: health.md
+  - Squads: squads.md
+  - Colaboradores: colaboradores.md
