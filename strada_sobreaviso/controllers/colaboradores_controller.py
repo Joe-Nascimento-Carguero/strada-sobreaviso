@@ -37,7 +37,9 @@ async def get_colaborador_by_id(colaborador_id: int, db: db_deps):
     status_code=status.HTTP_201_CREATED,
 )
 def create_colaborador(db: db_deps, colaborador: ColaboradorBase):
-    colaborador_model = Colaboradores(name=colaborador.name, squad_id=colaborador.squad_id)
+    colaborador_model = Colaboradores(
+        name=colaborador.name, squad_id=colaborador.squad_id
+    )
     colaboradores = select(Colaboradores).where(
         colaborador_model.name == colaborador.name
     )
@@ -56,4 +58,5 @@ def create_colaborador(db: db_deps, colaborador: ColaboradorBase):
         'result': 'Colaborador criada com sucesso',
         'colaborador': colaborador.name,
         'id': colaborador_model.id,
+        'squad_id': colaborador_model.squad_id,
     }
