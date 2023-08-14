@@ -20,4 +20,7 @@ jobs:
         run: pip install poetry
 
       - name: Install project dependencies
-        run: poetry install
+        run: poetry install --without doc
+
+      - name: Test
+        run: poetry run task test
