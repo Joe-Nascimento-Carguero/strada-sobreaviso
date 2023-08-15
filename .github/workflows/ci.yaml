@@ -30,6 +30,9 @@ jobs:
           - 55000:5432
 
     steps:
+      - name: Setting up database
+        run: PGPASSWORD=postgrespw createdb -h localhost -p 55000 -U postgres sobreaviso
+
       - name: Checkout repo
         uses: actions/checkout@v3.3.0
 
