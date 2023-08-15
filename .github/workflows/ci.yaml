@@ -3,21 +3,61 @@ name: CI
 on:
   push:
 
+env:
+  PYTHON_VERSION: "3.11"
+  POETRY_VERSION: "1.4.2"
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgrespw
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 55000:5432
+
     steps:
+      - name: Setting up database
+        run: PGPASSWORD=postgrespw createdb -h localhost -p 55000 -U postgres sobreaviso
+
       - name: Checkout repo
         uses: actions/checkout@v3.3.0
 
-      - name: Install Python
+      - name: Install Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      - name: Install Poetry
+      - name: Cache Poetry cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-cache-${{ runner.os }}-${{ steps.setup_python.outputs.python-version }}-${{ env.POETRY_VERSION }}
+
+      - name: Cache Packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: poetry-local-${{ runner.os }}-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+      - name: Install Poetry ${{ env.POETRY_VERSION }}
         run: pip install poetry
 
       - name: Install project dependencies
-        run: poetry install
+        run: poetry install --without doc
+
+      # - name: Test
+      #   run: poetry run task test
